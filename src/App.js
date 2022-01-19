@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
+import Logout from './components/Logout'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -21,6 +22,14 @@ const App = () => {
     )
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in with', username, password)
@@ -29,7 +38,10 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
-      console.log('user :>> ', user)
+
+      window.localStorage.setItem(
+        'loggedBlogappUser', JSON.stringify(user)
+      )
       setUser(user)
       setUsername('')
       setPassword('')
@@ -49,6 +61,21 @@ const App = () => {
         })
       }, 5000)
     }
+  }
+
+  const handleLogout = (event) => {
+    console.log('logging out', event.target.value)
+    window.localStorage.removeItem('loggedBlogappUser')
+    setNotification({ message: `User ${user.username} logged out`, isError: false })
+    setUser(null)
+    setUsername('')
+    setPassword('')
+    setTimeout(() => {
+      setNotification({
+        message: null,
+        isError: false,
+      })
+    }, 5000)
   }
 
   const handleUsernameChange = (event) => {
@@ -83,11 +110,20 @@ const App = () => {
     )
   }
 
+  const showLogout = () => {
+    return (
+      <div>
+        <Logout onClick={handleLogout}></Logout>
+      </div>
+    )
+  }
+
   return (
     <div>
       <Notification notification={notification}/>
       {user === null && showLoginForm()}
       {user !== null && showBlogs()}
+      {user !== null && showLogout()}
     </div>
   )
 }
