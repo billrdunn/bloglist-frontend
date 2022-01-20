@@ -17,7 +17,6 @@ const Notification = ({ notification }) => {
 
   if (notification.isError) {
     notificationStyle.color = 'red'
-    console.log('setting colour to red')
   }
   return (
     <div style={notificationStyle}>

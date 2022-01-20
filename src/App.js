@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
 import blogService from './services/blogs'
@@ -8,6 +9,11 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [newBlog, setNewBlog] = useState({
+    title: '',
+    author: '',
+    url: ''
+  })
   const [notification, setNotification] = useState({
     message: null,
     isError: false,
@@ -32,7 +38,6 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in with', username, password)
 
     try {
       const user = await loginService.login({
@@ -42,6 +47,7 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
+      // blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -78,16 +84,71 @@ const App = () => {
     }, 5000)
   }
 
+  const handleCreateBlog = async () => {
+    try {
+      blogService.setToken(user.token)
+      const blog = await blogService.create(newBlog)
+      setNotification({ message: `Blog ${blog.title} added`, isError: false })
+      setBlogs({
+        title: '',
+        author: '',
+        url: ''
+      })
+      setTimeout(() => {
+        setNotification({
+          message: null,
+          isError: false,
+        })
+      }, 5000)
+    } catch (exception) {
+      setNotification({ message: 'Blog could not be added', isError: true })
+      setTimeout(() => {
+        setNotification({
+          message: null,
+          isError: false,
+        })
+      }, 5000)
+    }
+  }
+
   const handleUsernameChange = (event) => {
     const username = event.target.value
-    console.log('username :>> ', username)
     setUsername(username)
   }
 
   const handlePasswordChange = (event) => {
     const password = event.target.value
-    console.log('password :>> ', password)
     setPassword(password)
+  }
+
+  const handleTitleChange = (event) => {
+    const title = event.target.value
+    const newBlogObj = {
+      title: title,
+      author: newBlog.author,
+      url: newBlog.url
+    }
+    setNewBlog(newBlogObj)
+  }
+
+  const handleAuthorChange = (event) => {
+    const author = event.target.value
+    const newBlogObj = {
+      title: newBlog.title,
+      author: author,
+      url: newBlog.url
+    }
+    setNewBlog(newBlogObj)
+  }
+
+  const handleUrlChange = (event) => {
+    const url = event.target.value
+    const newBlogObj = {
+      title: newBlog.title,
+      author: newBlog.author,
+      url: url
+    }
+    setNewBlog(newBlogObj)
   }
 
   const showLoginForm = () => (
@@ -97,6 +158,17 @@ const App = () => {
       onPasswordChange={handlePasswordChange}
       usernameValue={username}
       passwordValue={password}/>
+  )
+
+  const showBlogForm = () => (
+    <BlogForm
+      onSubmit={handleCreateBlog}
+      onTitleChange={handleTitleChange}
+      onAuthorChange={handleAuthorChange}
+      onUrlChange={handleUrlChange}
+      titleValue={newBlog.title}
+      authorValue={newBlog.value}
+      urlValue={newBlog.url}/>
   )
 
   const showBlogs = () => {
@@ -123,6 +195,7 @@ const App = () => {
       <Notification notification={notification}/>
       {user === null && showLoginForm()}
       {user !== null && showBlogs()}
+      {user !== null && showBlogForm()}
       {user !== null && showLogout()}
     </div>
   )
