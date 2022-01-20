@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -152,23 +153,29 @@ const App = () => {
   }
 
   const showLoginForm = () => (
-    <LoginForm
-      onSubmit={handleLogin}
-      onUsernameChange={handleUsernameChange}
-      onPasswordChange={handlePasswordChange}
-      usernameValue={username}
-      passwordValue={password}/>
+    <Togglable buttonLabel="show login">
+      <LoginForm
+        onSubmit={handleLogin}
+        onUsernameChange={handleUsernameChange}
+        onPasswordChange={handlePasswordChange}
+        usernameValue={username}
+        passwordValue={password}
+      />
+    </Togglable>
   )
 
   const showBlogForm = () => (
-    <BlogForm
-      onSubmit={handleCreateBlog}
-      onTitleChange={handleTitleChange}
-      onAuthorChange={handleAuthorChange}
-      onUrlChange={handleUrlChange}
-      titleValue={newBlog.title}
-      authorValue={newBlog.value}
-      urlValue={newBlog.url}/>
+    <Togglable buttonLabel="create new blog">
+      <BlogForm
+        onSubmit={handleCreateBlog}
+        onTitleChange={handleTitleChange}
+        onAuthorChange={handleAuthorChange}
+        onUrlChange={handleUrlChange}
+        titleValue={newBlog.title}
+        authorValue={newBlog.value}
+        urlValue={newBlog.url}
+      />
+    </Togglable>
   )
 
   const showBlogs = () => {
@@ -192,10 +199,11 @@ const App = () => {
 
   return (
     <div>
-      <Notification notification={notification}/>
+      <Notification notification={notification} />
       {user === null && showLoginForm()}
       {user !== null && showBlogs()}
       {user !== null && showBlogForm()}
+      <br></br>
       {user !== null && showLogout()}
     </div>
   )
