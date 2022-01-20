@@ -10,17 +10,10 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState({
-    title: '',
-    author: '',
-    url: ''
-  })
   const [notification, setNotification] = useState({
     message: null,
     isError: false,
   })
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -37,21 +30,14 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
+  const handleLogin = async (loginObject) => {
     try {
-      const user = await loginService.login({
-        username, password
-      })
+      const user = await loginService.login(loginObject)
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
-      // blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
       setNotification({ message: `User ${user.username} logged in`, isError: false })
       setTimeout(() => {
         setNotification({
@@ -60,7 +46,7 @@ const App = () => {
         })
       }, 5000)
     } catch (exception) {
-      setNotification({ message: 'Wrong credentials', isError: true })
+      setNotification({ message: 'Invalid credentials', isError: true })
       setTimeout(() => {
         setNotification({
           message: null,
@@ -75,8 +61,6 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setNotification({ message: `User ${user.username} logged out`, isError: false })
     setUser(null)
-    setUsername('')
-    setPassword('')
     setTimeout(() => {
       setNotification({
         message: null,
@@ -85,16 +69,15 @@ const App = () => {
     }, 5000)
   }
 
-  const handleCreateBlog = async () => {
+  const handleCreateBlog = async (blogObject) => {
     try {
       blogService.setToken(user.token)
-      const blog = await blogService.create(newBlog)
+      const blog = await blogService.create(blogObject)
       setNotification({ message: `Blog ${blog.title} added`, isError: false })
-      setBlogs({
-        title: '',
-        author: '',
-        url: ''
-      })
+
+      const newBlogs = await blogService.getAll()
+      setBlogs(newBlogs)
+
       setTimeout(() => {
         setNotification({
           message: null,
@@ -112,54 +95,12 @@ const App = () => {
     }
   }
 
-  const handleUsernameChange = (event) => {
-    const username = event.target.value
-    setUsername(username)
-  }
 
-  const handlePasswordChange = (event) => {
-    const password = event.target.value
-    setPassword(password)
-  }
-
-  const handleTitleChange = (event) => {
-    const title = event.target.value
-    const newBlogObj = {
-      title: title,
-      author: newBlog.author,
-      url: newBlog.url
-    }
-    setNewBlog(newBlogObj)
-  }
-
-  const handleAuthorChange = (event) => {
-    const author = event.target.value
-    const newBlogObj = {
-      title: newBlog.title,
-      author: author,
-      url: newBlog.url
-    }
-    setNewBlog(newBlogObj)
-  }
-
-  const handleUrlChange = (event) => {
-    const url = event.target.value
-    const newBlogObj = {
-      title: newBlog.title,
-      author: newBlog.author,
-      url: url
-    }
-    setNewBlog(newBlogObj)
-  }
 
   const showLoginForm = () => (
     <Togglable buttonLabel="show login">
       <LoginForm
-        onSubmit={handleLogin}
-        onUsernameChange={handleUsernameChange}
-        onPasswordChange={handlePasswordChange}
-        usernameValue={username}
-        passwordValue={password}
+        createLogin={handleLogin}
       />
     </Togglable>
   )
@@ -167,13 +108,7 @@ const App = () => {
   const showBlogForm = () => (
     <Togglable buttonLabel="create new blog">
       <BlogForm
-        onSubmit={handleCreateBlog}
-        onTitleChange={handleTitleChange}
-        onAuthorChange={handleAuthorChange}
-        onUrlChange={handleUrlChange}
-        titleValue={newBlog.title}
-        authorValue={newBlog.value}
-        urlValue={newBlog.url}
+        createBlog={handleCreateBlog}
       />
     </Togglable>
   )
