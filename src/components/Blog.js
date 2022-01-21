@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLikeButtonClicked }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -16,6 +16,17 @@ const Blog = ({ blog }) => {
     setShowFull(!showFull)
   }
 
+  const addLike = () => {
+    const newBlogObj = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      key: blog.id,
+    }
+    handleLikeButtonClicked(newBlogObj)
+  }
+
   const showFullInfo = () => (
     <div>
       {blog.title}
@@ -25,7 +36,7 @@ const Blog = ({ blog }) => {
       {blog.url}
       <br></br>
       likes: {blog.likes}
-      <button>like</button>
+      <button onClick={addLike}>like</button>
       <br></br>
       <button onClick={handleClick}> hide </button>
     </div>

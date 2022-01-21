@@ -97,7 +97,23 @@ const App = () => {
     }
   }
 
-
+  const handleLikeButtonClicked = async (blogObject) => {
+    try {
+      blogService.setToken(user.token)
+      await blogService.update(blogObject)
+      const newBlogs = await blogService.getAll()
+      setBlogs(newBlogs)
+    }
+    catch (exception) {
+      setNotification({ message: 'Blog could not be liked', isError: true })
+      setTimeout(() => {
+        setNotification({
+          message: null,
+          isError: false,
+        })
+      }, 5000)
+    }
+  }
 
   const showLoginForm = () => (
     <Togglable buttonLabel="show login">
@@ -120,7 +136,11 @@ const App = () => {
       <div>
         <h2>blogs</h2>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleLikeButtonClicked={handleLikeButtonClicked}
+          />
         )}
       </div>
     )
