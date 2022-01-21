@@ -155,10 +155,6 @@ const App = () => {
   )
 
   const showBlogs = () => {
-    console.log('blogs :>> ', blogs)
-    console.log('user :>> ', user)
-    console.log('user._id :>> ', user._id)
-    console.log('user.id :>> ', user.id)
     return (
       <div>
         <h2>blogs</h2>

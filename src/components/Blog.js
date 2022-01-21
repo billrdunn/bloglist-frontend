@@ -53,9 +53,9 @@ const Blog = ({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButto
       likes: {blog.likes}
       <button onClick={addLike}>like</button>
       <br></br>
-      <button onClick={handleClick}> hide </button>
-      <br></br>
       {showRemoveButton && removeButton()}
+      <br></br>
+      <button onClick={handleClick}> hide </button>
     </div>
   )
 
