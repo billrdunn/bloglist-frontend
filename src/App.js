@@ -35,6 +35,7 @@ const App = () => {
   const handleLogin = async (loginObject) => {
     try {
       const user = await loginService.login(loginObject)
+      console.log('user after login:>> ', user)
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
@@ -118,6 +119,25 @@ const App = () => {
     }
   }
 
+  const handleRemoveBlog = async (blogObject) => {
+    try {
+      blogService.setToken(user.token)
+      await blogService.remove(blogObject)
+      const newBlogs = await blogService.getAll()
+      newBlogs.sort((first, second) => second.likes - first.likes)
+      setBlogs(newBlogs)
+    }
+    catch (exception) {
+      setNotification({ message: 'Blog could not be removed', isError: true })
+      setTimeout(() => {
+        setNotification({
+          message: null,
+          isError: false,
+        })
+      }, 5000)
+    }
+  }
+
   const showLoginForm = () => (
     <Togglable buttonLabel="show login">
       <LoginForm
@@ -135,6 +155,10 @@ const App = () => {
   )
 
   const showBlogs = () => {
+    console.log('blogs :>> ', blogs)
+    console.log('user :>> ', user)
+    console.log('user._id :>> ', user._id)
+    console.log('user.id :>> ', user.id)
     return (
       <div>
         <h2>blogs</h2>
@@ -143,6 +167,8 @@ const App = () => {
             key={blog.id}
             blog={blog}
             handleLikeButtonClicked={handleLikeButtonClicked}
+            handleRemoveBlog={handleRemoveBlog}
+            showRemoveButton={user.username === blog.user.username}
           />
         )}
       </div>
