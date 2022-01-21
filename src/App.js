@@ -18,9 +18,10 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
+      blogs.sort((first, second) => second.likes - first.likes)
       setBlogs(blogs)
-    )
+    })
   }, [])
 
   useEffect(() => {
@@ -78,6 +79,7 @@ const App = () => {
       setNotification({ message: `Blog ${blog.title} added`, isError: false })
 
       const newBlogs = await blogService.getAll()
+      newBlogs.sort((first, second) => second.likes - first.likes)
       setBlogs(newBlogs)
 
       setTimeout(() => {
@@ -102,6 +104,7 @@ const App = () => {
       blogService.setToken(user.token)
       await blogService.update(blogObject)
       const newBlogs = await blogService.getAll()
+      newBlogs.sort((first, second) => second.likes - first.likes)
       setBlogs(newBlogs)
     }
     catch (exception) {
