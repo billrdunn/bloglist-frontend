@@ -12,15 +12,12 @@ test('renders content', () => {
   }
 
   const component = render(<Blog blog={blog}></Blog>)
-  component.debug()
 
+  // Two ways of doing the same thing:
   expect(component.container).toHaveTextContent('test blog')
 
-  //   const element = component.getByText('test blog')
-  //   expect(element).toBeDefined()
-
-  //   const div = component.container.querySelector('.blog')
-  //   expect(div).toHaveTextContent('test blog')
+  const div = component.container.querySelector('.reducedBlog')
+  expect(div).toHaveTextContent('test blog')
 
 })
 
@@ -40,7 +37,6 @@ test('clicking the button calls event handler once', () => {
 
   const showInfoButton = component.getByText('show info')
   fireEvent.click(showInfoButton)
-  component.debug()
 
   const likeButton = component.getByText('like')
   fireEvent.click(likeButton)
@@ -86,9 +82,32 @@ test('clicking show info button shows url and number of likes', () => {
 
   const showInfoButton = component.getByText('show info')
   fireEvent.click(showInfoButton)
-  component.debug()
 
   const div = component.container.querySelector('.fullBlog')
   expect(div).toHaveTextContent('test url')
   expect(div).toHaveTextContent('15')
+})
+
+test('clicking the like button twice the corresponding event handler is called twice', () => {
+  const blog = {
+    title: 'test blog',
+    author: 'test author',
+    url: 'test url'
+  }
+
+  const mockHandler = jest.fn()
+
+  const component = render(
+    <Blog blog={blog} handleLikeButtonClicked={mockHandler}/>
+  )
+
+  const showInfoButton = component.getByText('show info')
+  fireEvent.click(showInfoButton)
+  component.debug()
+
+  const likeButton = component.getByText('like')
+  fireEvent.click(likeButton)
+  fireEvent.click(likeButton)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
 })
