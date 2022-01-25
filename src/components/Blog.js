@@ -44,7 +44,7 @@ const Blog = ({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButto
 
   const showFullInfo = () => (
     <div className='fullBlog'>
-      {blog.title}
+      <span>{blog.title}</span>
       <br></br>
       {blog.author}
       <br></br>
