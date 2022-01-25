@@ -105,6 +105,16 @@ describe('Blog app', function () {
                 cy.get('@secondBlog')
                     .contains('likes: 1')
             })
+            it.only('the user who created a blog can delete it', function () {
+                cy.contains('second blog')
+                    .parent().as('secondBlog')
+                    .find('button').click()
+                
+                cy.get('@secondBlog')
+                    .contains('remove').click()
+
+                cy.get('html').should('not.contain', 'second blog')
+            })
         })
     })
 })

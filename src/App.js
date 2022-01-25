@@ -164,7 +164,7 @@ const App = () => {
             blog={blog}
             handleLikeButtonClicked={handleLikeButtonClicked}
             handleRemoveBlog={handleRemoveBlog}
-            // showRemoveButton={user.username === blog.user.username}
+            showRemoveButton={user.username === blog.user.username}
           />
         )}
       </div>
