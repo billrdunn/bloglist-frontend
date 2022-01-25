@@ -71,10 +71,10 @@ describe('Blog app', function () {
             cy.login({ username: 'test_user', password: 'password123' })
         })
 
-        describe('after a new blog is created', function () {
+        describe('after three new blogs are created', function () {
             beforeEach(function () {
                 cy.createBlog({
-                    title: 'blog created by cypress',
+                    title: 'first blog created by cypress',
                     author: 'cypress author',
                     url: 'cypress url'
                 })
@@ -105,7 +105,7 @@ describe('Blog app', function () {
                 cy.get('@secondBlog')
                     .contains('likes: 1')
             })
-            it.only('the user who created a blog can delete it', function () {
+            it('the user who created a blog can delete it', function () {
                 cy.contains('second blog')
                     .parent().as('secondBlog')
                     .find('button').click()
@@ -114,6 +114,20 @@ describe('Blog app', function () {
                     .contains('remove').click()
 
                 cy.get('html').should('not.contain', 'second blog')
+            })
+            it.only('the blog with the most likes is shown first', function () {
+                cy.contains('second blog')
+                    .parent().as('secondBlog')
+                    .find('button').click()
+                
+                cy.get('@secondBlog')
+                    .contains('like').click()
+
+                cy.get('.blogList').get('span')
+                    .should('contain', 'second blog')
+                    .should('not.contain', 'first blog')
+                    .should('not.contain', 'third blog')
+
             })
         })
     })

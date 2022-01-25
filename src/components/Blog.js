@@ -69,7 +69,7 @@ const Blog = ({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButto
     )
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blogList'>
       {showFull ? showFullInfo () : hideFullInfo()}
     </div>
   )
