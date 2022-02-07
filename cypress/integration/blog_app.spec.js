@@ -115,7 +115,7 @@ describe('Blog app', function () {
 
                 cy.get('html').should('not.contain', 'second blog')
             })
-            it.only('the blog with the most likes is shown first', function () {
+            it('the blog with the most likes is shown first', function () {
                 cy.contains('second blog')
                     .parent().as('secondBlog')
                     .find('button').click()
