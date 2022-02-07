@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Table } from 'react-bootstrap'
 
 const Blog = ({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButton }) => {
 
@@ -44,18 +45,29 @@ const Blog = ({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButto
 
   const showFullInfo = () => (
     <div className='fullBlog'>
-      <span>{blog.title}</span>
-      <br></br>
-      {blog.author}
-      <br></br>
-      {blog.url}
-      <br></br>
-      likes: {blog.likes}
-      <button onClick={addLike}>like</button>
-      <br></br>
-      {showRemoveButton && removeButton()}
-      <br></br>
-      <button onClick={handleClick}> hide </button>
+      <Table striped>
+        <tbody>
+          <td>
+            <tr>
+              <span>{blog.title}</span>
+            </tr>
+            <tr>
+              {blog.author}
+            </tr>
+            <tr>
+              {blog.url}
+            </tr>
+            <tr>
+              likes: {blog.likes}
+              <button onClick={addLike}>like</button>
+            </tr>
+            {showRemoveButton && removeButton()}
+            <button onClick={handleClick}> hide </button>
+          </td>
+          <br></br>
+          <br></br>
+        </tbody>
+      </Table>
     </div>
   )
 
