@@ -44,6 +44,7 @@ const App = () => {
 
 
   const handleLogout = () => {
+    console.log('handleLogout...')
     window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
   }

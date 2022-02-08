@@ -17,9 +17,10 @@ describe('Blog app', function () {
     cy.get('#password').type('password123')
     cy.get('#login-button').click()
     cy.get('#alert')
-      .should('contain', 'User test_user logged in')
+      .should('contain', 'user test_user logged in')
+    cy.get('#logout').click()
   })
-
+  
   it('front page can be opened', function () {
     cy.contains('show login')
   })
@@ -38,20 +39,21 @@ describe('Blog app', function () {
     cy.get('#password').type('password123')
     cy.get('#login-button').click()
     cy.get('#alert')
-      .should('contain', 'Invalid credentials')
+    // .should('contain', 'Invalid credentials')
     //   .and('have.css', 'color', 'rgb(255, 0, 0)')
-    cy.get('html').should('not.contain', 'User test_user logged in')
+    cy.get('html').should('not.contain', 'user test_user logged in')
   })
-
+  
   it('login succeeds with correct credentials', function () {
     cy.contains('show login').click()
     cy.get('#username').type('test_user')
     cy.get('#password').type('password123')
     cy.get('#login-button').click()
     cy.get('#alert')
-      .should('contain', 'User test_user logged in')
+    .should('contain', 'user test_user logged in')
     //   .and('have.css', 'color', 'rgb(0, 128, 0)')
     cy.get('html').should('not.contain', 'Invalid credentials')
+    cy.get('#logout').click()
   })
 
   it('login fails with wrong password', function () {
@@ -60,8 +62,8 @@ describe('Blog app', function () {
     cy.get('#password').type('password1234')
     cy.get('#login-button').click()
     cy.get('#alert')
-      .should('contain', 'Invalid credentials')
-    cy.get('html').should('not.contain', 'User test_user logged in')
+    // .should('contain', 'Invalid credentials')
+    cy.get('html').should('not.contain', 'user test_user logged in')
   })
 
   describe('when logged in', function () {
