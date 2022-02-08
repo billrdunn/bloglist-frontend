@@ -10,10 +10,6 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [notification, setNotification] = useState({
-    message: null,
-    isError: false,
-  })
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
 
@@ -41,62 +37,29 @@ const App = () => {
         'loggedBlogappUser', JSON.stringify(user)
       )
       setUser(user)
-      setNotification({ message: `User ${user.username} logged in`, isError: false })
-      setTimeout(() => {
-        setNotification({
-          message: null,
-          isError: false,
-        })
-      }, 5000)
     } catch (exception) {
-      setNotification({ message: 'Invalid credentials', isError: true })
-      setTimeout(() => {
-        setNotification({
-          message: null,
-          isError: false,
-        })
-      }, 5000)
+      console.log('exeception caught')
     }
   }
 
-  const handleLogout = (event) => {
-    console.log('logging out', event.target.value)
+
+  const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
-    setNotification({ message: `User ${user.username} logged out`, isError: false })
     setUser(null)
-    setTimeout(() => {
-      setNotification({
-        message: null,
-        isError: false,
-      })
-    }, 5000)
   }
 
   const handleCreateBlog = async (blogObject) => {
     try {
       blogFormRef.current.toggleVisability()
       blogService.setToken(user.token)
-      const blog = await blogService.create(blogObject)
-      setNotification({ message: `Blog ${blog.title} added`, isError: false })
+      await blogService.create(blogObject)
 
       const newBlogs = await blogService.getAll()
       newBlogs.sort((first, second) => second.likes - first.likes)
       setBlogs(newBlogs)
 
-      setTimeout(() => {
-        setNotification({
-          message: null,
-          isError: false,
-        })
-      }, 5000)
     } catch (exception) {
-      setNotification({ message: 'Blog could not be added', isError: true })
-      setTimeout(() => {
-        setNotification({
-          message: null,
-          isError: false,
-        })
-      }, 5000)
+      console.log('exception :>> ', exception)
     }
   }
 
@@ -109,13 +72,7 @@ const App = () => {
       setBlogs(newBlogs)
     }
     catch (exception) {
-      setNotification({ message: 'Blog could not be liked', isError: true })
-      setTimeout(() => {
-        setNotification({
-          message: null,
-          isError: false,
-        })
-      }, 5000)
+      console.log('exception :>> ', exception)
     }
   }
 
@@ -128,13 +85,7 @@ const App = () => {
       setBlogs(newBlogs)
     }
     catch (exception) {
-      setNotification({ message: 'Blog could not be removed', isError: true })
-      setTimeout(() => {
-        setNotification({
-          message: null,
-          isError: false,
-        })
-      }, 5000)
+      console.log('exception :>> ', exception)
     }
   }
 
@@ -181,7 +132,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification notification={notification} />
+      <Notification />
       {user === null && showLoginForm()}
       {user !== null && showBlogs()}
       {user !== null && showBlogForm()}

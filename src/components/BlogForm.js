@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { updateNotification } from '../reducers/notificationReducer'
 
 const BlogForm = ({ createBlog }) => {
+  const dispatch = useDispatch()
 
   const [newBlog, setNewBlog] = useState({
     title: '',
@@ -50,6 +53,7 @@ const BlogForm = ({ createBlog }) => {
       author: '',
       url: ''
     })
+    dispatch(updateNotification(`new blog "${newBlog.title}" added`, 3, false))
   }
 
   return (

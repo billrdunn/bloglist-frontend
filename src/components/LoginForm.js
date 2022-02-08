@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Form } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
+import { updateNotification } from '../reducers/notificationReducer'
 
 const LoginForm = ({ createLogin }) => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
 
   const handleUsernameChange = (event) => {
     const username = event.target.value
@@ -17,7 +20,8 @@ const LoginForm = ({ createLogin }) => {
     setPassword(password)
   }
 
-  const addLogin = (event) => {
+  const addLogin = async (event) => {
+    console.log('addLogin...')
     event.preventDefault()
     createLogin({
       username: username,
@@ -25,6 +29,7 @@ const LoginForm = ({ createLogin }) => {
     })
     setUsername('')
     setPassword('')
+    dispatch(updateNotification(`user ${username} logged in`, 3, false))
   }
 
   LoginForm.propTypes = {
