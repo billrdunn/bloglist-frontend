@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
@@ -6,63 +6,22 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
 import blogService from './services/blogs'
-import loginService from './services/login'
+import { useDispatch } from 'react-redux'
+import { initialiseBlogs } from './reducers/blogsReducer'
+import { sortBlogs } from './reducers/blogsReducer'
+import { useSelector } from 'react-redux'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(initialiseBlogs())
+    dispatch(sortBlogs())
+  }, [dispatch])
+
+  const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.login)
   const blogFormRef = useRef()
-
-  useEffect(() => {
-    blogService.getAll().then(blogs => {
-      blogs.sort((first, second) => second.likes - first.likes)
-      setBlogs(blogs)
-    })
-  }, [])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-    }
-  }, [])
-
-  const handleLogin = async (loginObject) => {
-    try {
-      const user = await loginService.login(loginObject)
-      console.log('user after login:>> ', user)
-
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-      setUser(user)
-    } catch (exception) {
-      console.log('exeception caught')
-    }
-  }
-
-
-  const handleLogout = () => {
-    console.log('handleLogout...')
-    window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
-  }
-
-  const handleCreateBlog = async (blogObject) => {
-    try {
-      blogFormRef.current.toggleVisability()
-      blogService.setToken(user.token)
-      await blogService.create(blogObject)
-
-      const newBlogs = await blogService.getAll()
-      newBlogs.sort((first, second) => second.likes - first.likes)
-      setBlogs(newBlogs)
-
-    } catch (exception) {
-      console.log('exception :>> ', exception)
-    }
-  }
 
   const handleLikeButtonClicked = async (blogObject) => {
     try {
@@ -70,7 +29,7 @@ const App = () => {
       await blogService.update(blogObject)
       const newBlogs = await blogService.getAll()
       newBlogs.sort((first, second) => second.likes - first.likes)
-      setBlogs(newBlogs)
+      // setBlogs(newBlogs)
     }
     catch (exception) {
       console.log('exception :>> ', exception)
@@ -83,7 +42,7 @@ const App = () => {
       await blogService.remove(blogObject)
       const newBlogs = await blogService.getAll()
       newBlogs.sort((first, second) => second.likes - first.likes)
-      setBlogs(newBlogs)
+      // setBlogs(newBlogs)
     }
     catch (exception) {
       console.log('exception :>> ', exception)
@@ -92,17 +51,13 @@ const App = () => {
 
   const showLoginForm = () => (
     <Togglable buttonLabel="show login">
-      <LoginForm
-        createLogin={handleLogin}
-      />
+      <LoginForm/>
     </Togglable>
   )
 
   const showBlogForm = () => (
     <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-      <BlogForm
-        createBlog={handleCreateBlog}
-      />
+      <BlogForm/>
     </Togglable>
   )
 
@@ -126,7 +81,7 @@ const App = () => {
   const showLogout = () => {
     return (
       <div>
-        <Logout onClick={handleLogout}></Logout>
+        <Logout/>
       </div>
     )
   }

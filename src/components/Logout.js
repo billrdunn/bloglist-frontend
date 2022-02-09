@@ -1,12 +1,13 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
+import { logout } from '../reducers/loginReducer'
 import { updateNotification } from '../reducers/notificationReducer'
 
-const Logout = ({ onClick }) => {
+const Logout = () => {
   const dispatch = useDispatch()
 
   const handleLogoutButtonClicked = () => {
-    onClick()
+    dispatch(logout())
     dispatch(updateNotification('logged out', 3, false))
   }
 

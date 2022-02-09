@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import { Button, Form } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { updateNotification } from '../reducers/notificationReducer'
+import { login } from '../reducers/loginReducer'
 
-const LoginForm = ({ createLogin }) => {
+const LoginForm = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -23,18 +23,20 @@ const LoginForm = ({ createLogin }) => {
   const addLogin = async (event) => {
     console.log('addLogin...')
     event.preventDefault()
-    createLogin({
+    // createLogin({
+    //   username: username,
+    //   password: password
+    // })
+    const user = {
       username: username,
       password: password
-    })
+    }
     setUsername('')
     setPassword('')
+    dispatch(login(user))
     dispatch(updateNotification(`user ${username} logged in`, 3, false))
   }
 
-  LoginForm.propTypes = {
-    createLogin: PropTypes.func.isRequired
-  }
 
   return (
     <div>

@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateNotification } from '../reducers/notificationReducer'
+import { add_Blog } from '../reducers/blogsReducer'
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = () => {
   const dispatch = useDispatch()
+  const user = useSelector(state => state.login)
 
   const [newBlog, setNewBlog] = useState({
     title: '',
@@ -43,16 +45,18 @@ const BlogForm = ({ createBlog }) => {
 
   const addBlog = (event) => {
     event.preventDefault()
-    createBlog({
+    const blog = {
       title: newBlog.title,
       author: newBlog.author,
-      url: newBlog.url
-    })
+      url: newBlog.url,
+      user: user
+    }
     setNewBlog({
       title: '',
       author: '',
       url: ''
     })
+    dispatch(add_Blog(blog))
     dispatch(updateNotification(`new blog "${newBlog.title}" added`, 3, false))
   }
 
