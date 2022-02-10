@@ -10,14 +10,12 @@ describe('<Togglable />', () => {
     component = render(
       <Togglable buttonLabel="show...">
         <div className="testDiv" />
-      </Togglable>
+      </Togglable>,
     )
   })
 
   test('renders its children', () => {
-    expect(
-      component.container.querySelector('.testDiv')
-    ).not.toBe(null)
+    expect(component.container.querySelector('.testDiv')).not.toBe(null)
   })
 
   test('at start the children are not displayed', () => {
@@ -46,5 +44,4 @@ describe('<Togglable />', () => {
     const div = component.container.querySelector('.togglableContent')
     expect(div).toHaveStyle('display: none')
   })
-
 })

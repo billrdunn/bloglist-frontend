@@ -6,9 +6,7 @@ import BlogForm from './BlogForm'
 test('<BlogForm /> updates parent state and calls onSubmit', () => {
   const createBlog = jest.fn()
 
-  const component = render(
-    <BlogForm createBlog={createBlog} />
-  )
+  const component = render(<BlogForm createBlog={createBlog} />)
 
   const titleInput = component.container.querySelector('.titleInput')
   const authorInput = component.container.querySelector('.authorInput')
@@ -16,13 +14,13 @@ test('<BlogForm /> updates parent state and calls onSubmit', () => {
   const form = component.container.querySelector('form')
 
   fireEvent.change(titleInput, {
-    target: { value: 'test title' }
+    target: { value: 'test title' },
   })
   fireEvent.change(authorInput, {
-    target: { value: 'test author' }
+    target: { value: 'test author' },
   })
   fireEvent.change(urlInput, {
-    target: { value: 'test url' }
+    target: { value: 'test url' },
   })
   fireEvent.submit(form)
 

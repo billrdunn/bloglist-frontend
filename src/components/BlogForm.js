@@ -1,24 +1,23 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateNotification } from '../reducers/notificationReducer'
-import { add_Blog } from '../reducers/blogsReducer'
+import { addBlog } from '../reducers/blogsReducer'
 
-const BlogForm = () => {
+function BlogForm() {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.login)
+  const user = useSelector((state) => state.login)
 
   const [newBlog, setNewBlog] = useState({
     title: '',
     author: '',
-    url: ''
+    url: '',
   })
 
   const handleTitleChange = (event) => {
     const title = event.target.value
     const newBlogObj = {
-      title: title,
+      title,
       author: newBlog.author,
-      url: newBlog.url
+      url: newBlog.url,
     }
     setNewBlog(newBlogObj)
   }
@@ -27,8 +26,8 @@ const BlogForm = () => {
     const author = event.target.value
     const newBlogObj = {
       title: newBlog.title,
-      author: author,
-      url: newBlog.url
+      author,
+      url: newBlog.url,
     }
     setNewBlog(newBlogObj)
   }
@@ -38,51 +37,57 @@ const BlogForm = () => {
     const newBlogObj = {
       title: newBlog.title,
       author: newBlog.author,
-      url: url
+      url,
     }
     setNewBlog(newBlogObj)
   }
 
-  const addBlog = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault()
     const blog = {
       title: newBlog.title,
       author: newBlog.author,
       url: newBlog.url,
-      user: user
+      user,
     }
     setNewBlog({
       title: '',
       author: '',
-      url: ''
+      url: '',
     })
-    dispatch(add_Blog(blog))
-    dispatch(updateNotification(`new blog "${newBlog.title}" added`, 3, false))
+    dispatch(addBlog(blog))
   }
 
   return (
     <div>
       <h2>create new blog</h2>
-      <form onSubmit={addBlog}>
-        title: <input className='titleInput'
+      <form onSubmit={handleSubmit}>
+        title:{' '}
+        <input
+          className="titleInput"
           value={newBlog.title}
-          onChange={handleTitleChange} />
+          onChange={handleTitleChange}
+        />
         <div>
-          author: <input className='authorInput'
+          author:{' '}
+          <input
+            className="authorInput"
             value={newBlog.author}
-            onChange={handleAuthorChange} />
+            onChange={handleAuthorChange}
+          />
         </div>
         <div>
-          url: <input className='urlInput'
-            value={newBlog.url}
-            onChange={handleUrlChange} />
+          url:{' '}
+          <input className="urlInput" value={newBlog.url} onChange={handleUrlChange} />
         </div>
         <div>
-          <button id='submit-new-blog'
-            type="submit">create</button>
+          <button id="submit-new-blog" type="submit">
+            create
+          </button>
         </div>
       </form>
-    </div>)
+    </div>
+  )
 }
 
 const exportedObject = BlogForm

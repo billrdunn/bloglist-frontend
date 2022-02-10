@@ -1,42 +1,31 @@
 import React, { useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
-import { updateNotification } from '../reducers/notificationReducer'
 import { login } from '../reducers/loginReducer'
 
-const LoginForm = () => {
-
+function LoginForm() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
 
   const handleUsernameChange = (event) => {
-    const username = event.target.value
-    setUsername(username)
+    // const username = event.target.value
+    setUsername(event.target.value)
   }
 
   const handlePasswordChange = (event) => {
-    const password = event.target.value
-    setPassword(password)
+    // const password = event.target.value
+    setPassword(event.target.value)
   }
 
   const addLogin = async (event) => {
     console.log('addLogin...')
     event.preventDefault()
-    // createLogin({
-    //   username: username,
-    //   password: password
-    // })
-    const user = {
-      username: username,
-      password: password
-    }
+    // const user = {username, password}
+    dispatch(login({username, password}))
     setUsername('')
     setPassword('')
-    dispatch(login(user))
-    dispatch(updateNotification(`user ${username} logged in`, 3, false))
   }
-
 
   return (
     <div>
@@ -44,10 +33,20 @@ const LoginForm = () => {
       <Form onSubmit={addLogin}>
         <Form.Group>
           <Form.Label>username:</Form.Label>
-          <Form.Control type="text" id="username" value={username} onChange={handleUsernameChange} />
+          <Form.Control
+            type="text"
+            id="username"
+            value={username}
+            onChange={handleUsernameChange}
+          />
           <Form.Label>password:</Form.Label>
-          <Form.Control type="password" id="password" value={password} onChange={handlePasswordChange} />
-          <Button variant="primary" type="submit" id='login-button' >
+          <Form.Control
+            type="password"
+            id="password"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+          <Button variant="primary" type="submit" id="login-button">
             login
           </Button>
         </Form.Group>

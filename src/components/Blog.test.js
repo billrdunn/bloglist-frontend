@@ -1,39 +1,34 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
-import { prettyDOM } from '@testing-library/react'
 import Blog from './Blog'
 
 test('renders content', () => {
   const blog = {
     title: 'test blog',
     author: 'test author',
-    url: 'test url'
+    url: 'test url',
   }
 
-  const component = render(<Blog blog={blog}></Blog>)
+  const component = render(<Blog blog={blog} />)
 
   // Two ways of doing the same thing:
   expect(component.container).toHaveTextContent('test blog')
 
   const div = component.container.querySelector('.reducedBlog')
   expect(div).toHaveTextContent('test blog')
-
 })
 
 test('clicking the button calls event handler once', () => {
   const blog = {
     title: 'test blog',
     author: 'test author',
-    url: 'test url'
+    url: 'test url',
   }
 
   const mockHandler = jest.fn()
 
-  const component = render(
-    <Blog blog={blog} handleLikeButtonClicked={mockHandler}/>
-  )
-
+  const component = render(<Blog blog={blog} handleLikeButtonClicked={mockHandler} />)
 
   const showInfoButton = component.getByText('show info')
   fireEvent.click(showInfoButton)
@@ -49,10 +44,10 @@ test('renders title and author but not url or likes', () => {
     title: 'test blog',
     author: 'test author',
     url: 'test url',
-    likes: 14
+    likes: 14,
   }
 
-  const component = render(<Blog blog={blog}></Blog>)
+  const component = render(<Blog blog={blog} />)
 
   expect(component.container).toHaveTextContent('test blog')
   expect(component.container).toHaveTextContent('test author')
@@ -65,7 +60,6 @@ test('renders title and author but not url or likes', () => {
   expect(div).toHaveTextContent('test author')
   expect(div).not.toHaveTextContent('url')
   expect(div).not.toHaveTextContent(`${blog.likes}`)
-
 })
 
 test('clicking show info button shows url and number of likes', () => {
@@ -73,12 +67,10 @@ test('clicking show info button shows url and number of likes', () => {
     title: 'test blog',
     author: 'test author',
     url: 'test url',
-    likes: 15
+    likes: 15,
   }
 
-  const component = render(
-    <Blog blog={blog}/>
-  )
+  const component = render(<Blog blog={blog} />)
 
   const showInfoButton = component.getByText('show info')
   fireEvent.click(showInfoButton)
@@ -92,14 +84,12 @@ test('clicking the like button twice the corresponding event handler is called t
   const blog = {
     title: 'test blog',
     author: 'test author',
-    url: 'test url'
+    url: 'test url',
   }
 
   const mockHandler = jest.fn()
 
-  const component = render(
-    <Blog blog={blog} handleLikeButtonClicked={mockHandler}/>
-  )
+  const component = render(<Blog blog={blog} handleLikeButtonClicked={mockHandler} />)
 
   const showInfoButton = component.getByText('show info')
   fireEvent.click(showInfoButton)

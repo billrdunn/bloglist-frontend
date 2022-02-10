@@ -1,56 +1,52 @@
 import blogsService from '../services/blogs'
+import { updateNotification } from './notificationReducer'
 
-
-const blogsReducer = (state = [], action) => {
+const blogsReducer = (state = [], action = {}) => {
   switch (action.type) {
-  case 'ADD_BLOG':
-    return [...state, action.data]
+    case 'ADD_BLOG':
+      return [...state, action.data]
 
-  case 'INIT_BLOGS':
-    return action.data
+    case 'INIT_BLOGS':
+      return action.data
 
-  case 'SORT_BLOGS':
-    return state.sort((first, second) => second.likes - first.likes)
+    case 'SORT_BLOGS':
+      return state.sort((first, second) => second.likes - first.likes)
 
-  default:
-    return state
+    default:
+      return state
   }
 }
 
-export const add_Blog = (blog) => {
+export const addBlog = (blog) => {
   console.log('addBlog...')
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       // blogFormRef.current.toggleVisability()
       blogsService.setToken(blog.user.token)
-      await blogsService.create(blog)
+      const response = await blogsService.create(blog)
       dispatch({
         type: 'ADD_BLOG',
-        data: blog
+        data: response,
       })
-
+      dispatch(updateNotification(`new blog "${blog.title}" added`, 3, false))
     } catch (exception) {
-      console.log('exception :>> ', exception)
+      dispatch(updateNotification('blog could not be added', 3, true))
     }
   }
 }
 
-export const initialiseBlogs = () => {
-  return async dispatch => {
-    const blogs = await blogsService.getAll()
-    dispatch({
-      type: 'INIT_BLOGS',
-      data: blogs
-    })
-  }
+export const initialiseBlogs = () => async (dispatch) => {
+  const blogs = await blogsService.getAll()
+  dispatch({
+    type: 'INIT_BLOGS',
+    data: blogs,
+  })
 }
 
-export const sortBlogs = () => {
-  return async dispatch => {
-    dispatch({
-      type: 'SORT_BLOGS',
-    })
-  }
+export const sortBlogs = () => async (dispatch) => {
+  dispatch({
+    type: 'SORT_BLOGS',
+  })
 }
 
 export default blogsReducer

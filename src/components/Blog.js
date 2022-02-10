@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import { Table } from 'react-bootstrap'
 
-const Blog = ({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButton }) => {
-
+function Blog({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButton }) {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
     borderWidth: 1,
-    marginBottom: 5
+    marginBottom: 5,
   }
 
   const [showFull, setShowFull] = useState(false)
@@ -40,49 +39,46 @@ const Blog = ({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButto
   }
 
   const removeButton = () => (
-    <button onClick={removeBlog}>remove</button>
+    <button type="submit" onClick={removeBlog}>
+      remove
+    </button>
   )
 
   const showFullInfo = () => (
-    <div className='fullBlog'>
+    <div className="fullBlog">
       <Table striped>
         <tbody>
-          <td>
-            <tr>
-              <span>{blog.title}</span>
-            </tr>
-            <tr>
-              {blog.author}
-            </tr>
-            <tr>
-              {blog.url}
-            </tr>
-            <tr>
-              likes: {blog.likes}
-              <button onClick={addLike}>like</button>
-            </tr>
-            {showRemoveButton && removeButton()}
-            <button onClick={handleClick}> hide </button>
-          </td>
-          <br></br>
-          <br></br>
+          <tr>
+            <td>{blog.title}</td>
+          </tr>
+          <tr>
+            <td>{blog.author}</td>
+          </tr>
+          <tr>
+            <td>{blog.url}</td>
+          </tr>
+          <tr>
+            <td>likes: {blog.likes}</td>
+          </tr>
         </tbody>
       </Table>
+      <button type="submit" onClick={addLike}>like</button>
+      {showRemoveButton && removeButton()}
+      <button type="submit" onClick={handleClick}> hide </button>
     </div>
   )
 
-  const hideFullInfo = () =>
-    (
-      <div className='reducedBlog'>
-        {blog.title} by {blog.author}
-        <br></br>
-        <button onClick={handleClick}> show info </button>
-      </div>
-    )
+  const hideFullInfo = () => (
+    <div className="reducedBlog">
+      {blog.title} by {blog.author}
+      <br />
+      <button type="submit" onClick={handleClick}> show info </button>
+    </div>
+  )
 
   return (
-    <div style={blogStyle} className='blogList'>
-      {showFull ? showFullInfo () : hideFullInfo()}
+    <div style={blogStyle} className="blogList">
+      {showFull ? showFullInfo() : hideFullInfo()}
     </div>
   )
 }

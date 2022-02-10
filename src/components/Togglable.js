@@ -11,24 +11,20 @@ const Togglable = React.forwardRef((props, ref) => {
     setVisible(!visible)
   }
 
-  useImperativeHandle(ref, () => {
-    return {
-      toggleVisability
-    }
-  })
+  useImperativeHandle(ref, () => toggleVisability)
 
   Togglable.propTypes = {
-    buttonLabel: PropTypes.string.isRequired
+    buttonLabel: PropTypes.string.isRequired,
   }
 
   return (
     <div>
-      <div style = {hideWhenVisible}>
-        <button onClick={toggleVisability}>{props.buttonLabel}</button>
+      <div style={hideWhenVisible}>
+        <button type="submit" onClick={toggleVisability}>{props.buttonLabel}</button>
       </div>
-      <div style = {showWhenVisible} className="togglableContent">
+      <div style={showWhenVisible} className="togglableContent">
         {props.children}
-        <button onClick={toggleVisability}>cancel</button>
+        <button type="submit" onClick={toggleVisability}>cancel</button>
       </div>
     </div>
   )
