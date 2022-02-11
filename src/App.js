@@ -6,7 +6,6 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
-import blogService from './services/blogs'
 import { initialiseBlogs, sortBlogs } from './reducers/blogsReducer'
 
 function App() {
@@ -19,30 +18,6 @@ function App() {
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.login)
   const blogFormRef = useRef()
-
-  const handleLikeButtonClicked = async (blogObject) => {
-    try {
-      blogService.setToken(user.token)
-      await blogService.update(blogObject)
-      const newBlogs = await blogService.getAll()
-      newBlogs.sort((first, second) => second.likes - first.likes)
-      // setBlogs(newBlogs)
-    } catch (exception) {
-      console.log('exception :>> ', exception)
-    }
-  }
-
-  const handleRemoveBlog = async (blogObject) => {
-    try {
-      blogService.setToken(user.token)
-      await blogService.remove(blogObject)
-      const newBlogs = await blogService.getAll()
-      newBlogs.sort((first, second) => second.likes - first.likes)
-      // setBlogs(newBlogs)
-    } catch (exception) {
-      console.log('exception :>> ', exception)
-    }
-  }
 
   const showLoginForm = () => (
     <Togglable buttonLabel="show login">
@@ -63,8 +38,6 @@ function App() {
         <Blog
           key={blog.id}
           blog={blog}
-          handleLikeButtonClicked={handleLikeButtonClicked}
-          handleRemoveBlog={handleRemoveBlog}
           showRemoveButton={user.username === blog.user.username}
         />
       ))}

@@ -1,7 +1,9 @@
+import { useDispatch, useSelector } from 'react-redux'
 import React, { useState } from 'react'
 import { Table } from 'react-bootstrap'
+import { removeBlog, likeBlog } from '../reducers/blogsReducer'
 
-function Blog({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButton }) {
+function Blog({ blog, showRemoveButton }) {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -9,37 +11,41 @@ function Blog({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButto
     borderWidth: 1,
     marginBottom: 5,
   }
-
   const [showFull, setShowFull] = useState(false)
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.login)
+
 
   const handleClick = () => {
     setShowFull(!showFull)
   }
 
-  const addLike = () => {
+  const handleLikeButtonClicked = () => {
     const newBlogObj = {
       title: blog.title,
       author: blog.author,
       url: blog.url,
       likes: blog.likes + 1,
       key: blog.id,
+      user
     }
-    handleLikeButtonClicked(newBlogObj)
+    dispatch(likeBlog(newBlogObj))
   }
 
-  const removeBlog = () => {
+  const handleRemoveButtonClicked = () => {
     const newBlogObj = {
       title: blog.title,
       author: blog.author,
       url: blog.url,
       likes: blog.likes,
       key: blog.id,
+      user
     }
-    handleRemoveBlog(newBlogObj)
+    dispatch(removeBlog(newBlogObj))
   }
 
   const removeButton = () => (
-    <button type="submit" onClick={removeBlog}>
+    <button type="submit" onClick={handleRemoveButtonClicked}>
       remove
     </button>
   )
@@ -62,9 +68,14 @@ function Blog({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButto
           </tr>
         </tbody>
       </Table>
-      <button type="submit" onClick={addLike}>like</button>
+      <button type="submit" onClick={handleLikeButtonClicked}>
+        like
+      </button>
       {showRemoveButton && removeButton()}
-      <button type="submit" onClick={handleClick}> hide </button>
+      <button type="submit" onClick={handleClick}>
+        {' '}
+        hide{' '}
+      </button>
     </div>
   )
 
@@ -72,7 +83,10 @@ function Blog({ blog, handleLikeButtonClicked, handleRemoveBlog, showRemoveButto
     <div className="reducedBlog">
       {blog.title} by {blog.author}
       <br />
-      <button type="submit" onClick={handleClick}> show info </button>
+      <button type="submit" onClick={handleClick}>
+        {' '}
+        show info{' '}
+      </button>
     </div>
   )
 

@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import App from './App'
 import store from './store'
 
-const DEBUG = false
+const DEBUG = true
 if (!DEBUG) {
   if (!window.console) window.console = {}
   const methods = ['log', 'debug', 'warn', 'info']
