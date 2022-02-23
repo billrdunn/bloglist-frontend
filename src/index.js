@@ -9,7 +9,7 @@ if (!DEBUG) {
   if (!window.console) window.console = {}
   const methods = ['log', 'debug', 'warn', 'info']
   for (let i = 0; i < methods.length; i += 1) {
-    console[methods[i]] = function () {}
+    console[methods[i]] = function fn () {}
   }
 }
 
