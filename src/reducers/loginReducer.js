@@ -3,8 +3,8 @@ import blogService from '../services/blogs'
 import { updateNotification } from './notificationReducer'
 
 const loginReducer = (state = null, action = {}) => {
-  console.log('state now: ', state)
-  console.log('action: ', action)
+  // console.log('loginReducer state now: ', state)
+  // console.log('loginReducer action: ', action)
 
   switch (action.type) {
     case 'LOGIN':

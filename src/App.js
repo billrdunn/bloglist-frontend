@@ -6,21 +6,20 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
-import { initialiseBlogs, sortBlogs } from './reducers/blogsReducer'
+import { initialiseBlogs } from './reducers/blogsReducer'
 import { initialiseUser } from './reducers/loginReducer'
 
 function App() {
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(initialiseUser())
-    dispatch(initialiseBlogs())
-    dispatch(sortBlogs())
-  }, [dispatch])
-
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.login)
   const blogFormRef = useRef()
+
+  useEffect(() => {
+    dispatch(initialiseUser())
+    dispatch(initialiseBlogs())
+  }, [dispatch])
 
   const showLoginForm = () => (
     <Togglable buttonLabel="show login">

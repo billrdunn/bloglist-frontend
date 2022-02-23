@@ -2,6 +2,9 @@ import blogsService from '../services/blogs'
 import { updateNotification } from './notificationReducer'
 
 const blogsReducer = (state = [], action = {}) => {
+  // console.log('blogsReducer state now: ', state)
+  // console.log('blogsReducer action: ', action)
+
   switch (action.type) {
     case 'ADD_BLOG':
       return [...state, action.data]
@@ -9,20 +12,12 @@ const blogsReducer = (state = [], action = {}) => {
     case 'INIT_BLOGS':
       return action.data
 
-    case 'SORT_BLOGS':
-      return state.sort((first, second) => second.likes - first.likes)
-
     case 'SET_BLOGS':
       return action.data
 
     default:
       return state
   }
-}
-export const sortBlogs = () => async (dispatch) => {
-  dispatch({
-    type: 'SORT_BLOGS',
-  })
 }
 
 export const addBlog = (blog) => {
@@ -68,11 +63,11 @@ export const likeBlog = (blog) => {
       blogsService.setToken(blog.user.token)
       await blogsService.update(blog)
       const response = await blogsService.getAll()
+      response.sort((first, second) => second.likes - first.likes)
       dispatch({
         type: 'SET_BLOGS',
         data: response,
       })
-      sortBlogs()
       dispatch(updateNotification(`blog "${blog.title}" liked`, 3, false))
     } catch (exception) {
       dispatch(updateNotification('blog could not be liked', 3, true))
@@ -81,12 +76,13 @@ export const likeBlog = (blog) => {
 }
 
 export const initialiseBlogs = () => async (dispatch) => {
+  console.log('initialising blogs...')
   const blogs = await blogsService.getAll()
+  blogs.sort((first, second) => second.likes - first.likes)
   dispatch({
     type: 'INIT_BLOGS',
     data: blogs,
   })
 }
-
 
 export default blogsReducer
