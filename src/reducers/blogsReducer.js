@@ -7,7 +7,7 @@ const blogsReducer = (state = [], action = {}) => {
 
   switch (action.type) {
     case 'ADD_BLOG':
-      return [...state, action.data]
+      return action.data
 
     case 'INIT_BLOGS':
       return action.data
@@ -22,11 +22,13 @@ const blogsReducer = (state = [], action = {}) => {
 
 export const addBlog = (blog) => {
   console.log('addBlog...')
+  console.log('blog :>> ', blog);
   return async (dispatch) => {
     try {
       // blogFormRef.current.toggleVisability()
       blogsService.setToken(blog.user.token)
-      const response = await blogsService.create(blog)
+      await blogsService.create(blog)
+      const response = await blogsService.getAll()
       dispatch({
         type: 'ADD_BLOG',
         data: response,
@@ -45,6 +47,7 @@ export const removeBlog = (blog) => {
       blogsService.setToken(blog.user.token)
       await blogsService.remove(blog)
       const response = await blogsService.getAll()
+      response.sort((first, second) => second.likes - first.likes)
       dispatch({
         type: 'SET_BLOGS',
         data: response,

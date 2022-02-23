@@ -8,17 +8,20 @@ import Notification from './components/Notification'
 import Logout from './components/Logout'
 import { initialiseBlogs } from './reducers/blogsReducer'
 import { initialiseUser } from './reducers/loginReducer'
+import { initializeAllUsers } from './reducers/usersReducer'
 
 function App() {
   const dispatch = useDispatch()
 
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.login)
+  // const users = useSelector((state) => state.users)
   const blogFormRef = useRef()
 
   useEffect(() => {
     dispatch(initialiseUser())
     dispatch(initialiseBlogs())
+    dispatch(initializeAllUsers())
   }, [dispatch])
 
   const showLoginForm = () => (
@@ -34,16 +37,14 @@ function App() {
   )
 
   const showBlogs = () => (
-    <div>
-      <h2>blogs</h2>
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          showRemoveButton={user.username === blog.user.username}
-        />
-      ))}
-    </div>
+     (
+      <div>
+        <h2>blogs</h2>
+        {blogs.map((blog) => (
+          <Blog key={blog.id} blog={blog} showRemoveButton={user.username === blog.user.username} />
+        ))}
+      </div>
+    )
   )
 
   const showLogout = () => (
