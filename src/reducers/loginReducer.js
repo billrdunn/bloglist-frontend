@@ -1,7 +1,11 @@
 import loginService from '../services/login'
+import blogService from '../services/blogs'
 import { updateNotification } from './notificationReducer'
 
 const loginReducer = (state = null, action = {}) => {
+  console.log('state now: ', state)
+  console.log('action: ', action)
+
   switch (action.type) {
     case 'LOGIN':
       return action.data
@@ -10,8 +14,29 @@ const loginReducer = (state = null, action = {}) => {
       // state = null
       return null
 
+    case 'INIT_USER':
+      return action.user
+
     default:
       return state
+  }
+}
+
+export const initialiseUser = () => {
+  console.log('initialising user...');
+  const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+  if (loggedUserJSON) {
+    const user = JSON.parse(loggedUserJSON)
+    blogService.setToken(user.token)
+    return {
+      type: 'INIT_USER',
+      user
+    }
+  }
+
+  return {
+    type: 'INIT_USER',
+    user: null
   }
 }
 

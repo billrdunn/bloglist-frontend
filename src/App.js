@@ -7,10 +7,13 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Logout from './components/Logout'
 import { initialiseBlogs, sortBlogs } from './reducers/blogsReducer'
+import { initialiseUser } from './reducers/loginReducer'
 
 function App() {
   const dispatch = useDispatch()
+
   useEffect(() => {
+    dispatch(initialiseUser())
     dispatch(initialiseBlogs())
     dispatch(sortBlogs())
   }, [dispatch])

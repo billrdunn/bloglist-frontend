@@ -78,7 +78,7 @@ module.exports = {
     'no-return-assign': ['off'],
     'import/no-extraneous-dependencies': [
       'error',
-      { devDependencies: false, optionalDependencies: false, peerDependencies: false },
+      { devDependencies: true},
     ],
   },
 }
